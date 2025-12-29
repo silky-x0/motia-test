@@ -1,0 +1,38 @@
+[
+  {
+    "id": "hello-world-flow",
+    "config": {
+      "src/hello/log-greeting.step.js": {
+        "x": 409,
+        "y": 44
+      },
+      "src/hello/hello-api.step.ts": {
+        "x": -409,
+        "y": 0,
+        "sourceHandlePosition": "right"
+      },
+      "src/hello/process_greeting_step.py": {
+        "x": 0,
+        "y": 34,
+        "sourceHandlePosition": "right"
+      }
+    }
+  },
+  {
+    "id": "username-generator",
+    "config": {
+      "src/username-generator/log-usernames.step.ts": {
+        "x": 700,
+        "y": 34
+      },
+      "src/username-generator/generate-username.step.ts": {
+        "x": 0,
+        "y": 0
+      },
+      "src/username-generator/generate_username_ai_step.py": {
+        "x": 350,
+        "y": 34
+      }
+    }
+  }
+]
