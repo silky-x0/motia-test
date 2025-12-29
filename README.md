@@ -1,106 +1,90 @@
-# polyglot
+# Polyglot + AI Username Generator
 
-A Motia project created with the **multi-language** starter template (TypeScript + Python).
+A Motia project demonstrating a **multi-language** unified backend (TypeScript + Python) with **AI integration**.
 
-## What is Motia?
+## Why Motia?
 
-Motia is an open-source, unified backend framework that eliminates runtime fragmentation by bringing **APIs, background jobs, queueing, streaming, state, workflows, AI agents, observability, scaling, and deployment** into one unified system using a single core primitive, the **Step**.
+I was exploring the ways where I can use Multiple languages like TS, Python, JS, etc. in a single project. And that's where I found Motia. It is language agnostic and can be used to build a unified backend. Its core Idea is treat different services as steps and connect them using events, hence event driven architecture. I'll be using/exporing it more in coming days.
 
-## Polyglot Architecture
+## Features
 
-This template demonstrates Motia's polyglot capabilities by combining:
+### 1. Instagram Username Generator (New!)
+A complete AI-driven workflow that generates creative Instagram usernames using Google's Gemini AI.
 
-- **TypeScript**: API endpoint (`hello-api.step.ts`) - handles HTTP requests
-- **Python**: Event processor (`process_greeting_step.py`) - handles background processing
-- **JavaScript**: Logger (`log-greeting.step.js`) - handles workflow completion
+- **TypeScript**: API endpoint (`generate-username.step.ts`) - Accepts user preferences
+- **Python**: AI Processor (`generate_username_ai_step.py`) - Uses Gemini API to generate creative names
+- **TypeScript**: Logger (`log-usernames.step.ts`) - Logs and stores the results
 
-This shows how you can use the best language for each task while keeping everything in a single unified system.
+### 2. Polyglot "Hello World"
+The starter template demonstrating cross-language communication.
+
+- **TypeScript**: API endpoint (`hello-api.step.ts`)
+- **Python**: Event processor (`process_greeting_step.py`)
+- **JavaScript**: Logger (`log-greeting.step.js`)
 
 ## Quick Start
+
+### 1. Prerequisites
+- Node.js and Python 3.10+ installed
+- A Google Gemini API key (Get one [here](https://aistudio.google.com/apikey))
+
+### 2. Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Configure Environment
+echo "GEMINI_API_KEY=your_gemini_key_here" > .env
+```
+
+### 3. Run
 
 ```bash
 # Start the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
-This starts the Motia runtime and the **Workbench** - a powerful UI for developing and debugging your workflows. By default, it's available at [`http://localhost:3000`](http://localhost:3000).
+The server will start at `http://localhost:3000`.
+
+## Testing
+
+### Generate Usernames
+Generate creative usernames based on a theme and keywords:
 
 ```bash
-# Test your first endpoint
+curl -X POST http://localhost:3000/api/generate-username \
+  -H "Content-Type: application/json" \
+  -d '{"theme": "gaming", "keywords": ["ninja", "pro"], "count": 5}'
+```
+
+### Hello World Demo
+```bash
 curl http://localhost:3000/hello
 ```
 
-## How It Works
+## How It Works (Username Generator)
 
-1. **TypeScript API Step** receives the HTTP request at `/hello`
-2. It emits a `process-greeting` event with the request data
-3. **Python Event Step** picks up the event, processes it, and stores the result in state
-4. Python emits a `greeting-processed` event
-5. **JavaScript Event Step** logs the completed workflow
-
-## Step Types
-
-Every Step has a `type` that defines how it triggers:
-
-| Type | When it runs | Use case |
-|------|--------------|----------|
-| **`api`** | HTTP request | REST APIs, webhooks |
-| **`event`** | Event emitted | Background jobs, workflows |
-| **`cron`** | Schedule | Cleanup, reports, reminders |
-
-## Development Commands
-
-```bash
-# Start Workbench and development server
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-
-# Start production server (without hot reload)
-npm run start
-# or
-yarn start
-# or
-pnpm start
-
-# Generate TypeScript types from Step configs
-npm run generate-types
-# or
-yarn generate-types
-# or
-pnpm generate-types
-
-# Build project for deployment
-npm run build
-# or
-yarn build
-# or
-pnpm build
-```
+1. **API Step (TS)**: Receives a POST request with `theme`, `keywords`, and `count`. It emits a `username.requested` event.
+2. **AI Step (Python)**: Subscribes to `username.requested`. It constructs a prompt and calls the **Gemini API** using the `google-genai` SDK to generate unique usernames. It then emits `username.generated`.
+3. **Logger Step (TS)**: Subscribes to `username.generated`. It logs the usernames to the console and stores them in the Motia state for persistence.
 
 ## Project Structure
 
 ```
-steps/                           # Your Step definitions
-├── hello/
-│   ├── hello-api.step.ts       # TypeScript API endpoint
-│   ├── process_greeting_step.py # Python event processor
-│   └── log-greeting.step.js    # JavaScript logger
-motia.config.ts                  # Motia configuration
-requirements.txt                 # Python dependencies
+src/
+├── hello/                      # Hello World Demo
+│   ├── hello-api.step.ts
+│   ├── process_greeting_step.py
+│   └── log-greeting.step.js
+│
+└── username-generator/         # AI Username Generator
+    ├── generate-username.step.ts    # TS: API Endpoint
+    ├── generate_username_ai_step.py # Python: AI Logic
+    └── log-usernames.step.ts        # TS: Logging
 ```
-
-Steps are auto-discovered from your `steps/` or `src/` directories - no manual registration required.
 
 ## Learn More
 
-- [Documentation](https://motia.dev/docs) - Complete guides and API reference
-- [Quick Start Guide](https://motia.dev/docs/getting-started/quick-start) - Detailed getting started tutorial
-- [Core Concepts](https://motia.dev/docs/concepts/overview) - Learn about Steps and Motia architecture
-- [Discord Community](https://discord.gg/motia) - Get help and connect with other developers
+- [Motia Documentation](https://motia.dev/docs)
+- [Google Gemini API](https://ai.google.dev/)
